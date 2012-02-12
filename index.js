@@ -174,7 +174,7 @@ function rangeToStr(range, text) {
 	return buffer.join("");
 }
 function rangesToObject(ranges, text) {
-	var obj = {};
+	var obj = Object.create(null); // Creates to a true hash map
 
 	for(var i = 0; i < ranges.length; i++) {
 		var range = ranges[i];
