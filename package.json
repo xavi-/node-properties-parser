@@ -1,0 +1,17 @@
+{ "name": "node-properties-parser"
+, "version": "0.0.1"
+, "description": "A parser for .properties files written in javascript"
+, "keywords": [ "parser", ".properties", "java", "file parser" ]
+, "maintainers":
+  [ { "name": "Xavi"
+    , "email": "xavi.rmz@gmail.com"
+    , "web": "http://xavi.co"
+    }
+  ]
+, "main": "./index.js"
+, "repository":
+  { "type": "git"
+  , "url": "https://github.com/Xavi-/node-properties-parser"
+  }
+, "engines": { "node": ">= 0.3.1" }
+}
