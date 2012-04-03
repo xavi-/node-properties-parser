@@ -119,7 +119,7 @@ function consumeLineBreak(iter) {
 }
 function consumeVal(iter) {
 	var start = iter.pos(), children = [];
-	
+
 	var curChar;
 	while((curChar = iter.peek()) !== null) {
 		if(startsLineBreak(iter)) { children.push(consumeLineBreak(iter)); continue; }
@@ -160,8 +160,9 @@ var renderChild = {
 		return "";
 	}
 };
-function rangeToStr(range, text) {
+function rangeToBuffer(range, text) {
 	var start = range.start, buffer = [];
+
 	for(var i = 0; i < range.children.length; i++) {
 		var child = range.children[i];
 
@@ -171,7 +172,7 @@ function rangeToStr(range, text) {
 	}
 	buffer.push(text.substring(start, range.end));
 
-	return buffer.join("");
+	return buffer;
 }
 function rangesToObject(ranges, text) {
 	var obj = Object.create(null); // Creates to a true hash map
@@ -181,16 +182,15 @@ function rangesToObject(ranges, text) {
 
 		if(range.type !== "key-value") { continue; }
 
-		var key = rangeToStr(range.children[0], text);
-		var val = rangeToStr(range.children[2], text);
+		var key = rangeToBuffer(range.children[0], text).join("");
+		var val = rangeToBuffer(range.children[2], text).join("");
 		obj[key] = val;
 	}
 
 	return obj;
 }
 
-function parse(text) {
-	text = text.toString();
+function stringToRanges(text) {
 	var iter = new Iterator(text), ranges = [];
 
 	var curChar;
@@ -202,6 +202,82 @@ function parse(text) {
 		throw Error("Something crazy happened. text: '" + text + "'; curChar: '" + curChar + "'");
 	}
 
+	return ranges;
+}
+
+function Editor(text, path) {
+	var ranges = stringToRanges(text);
+	var obj = rangesToObject(ranges, text);
+	var keyRange = Object.create(null); // Creates to a true hash map
+
+	for(var i = 0; i < ranges.length; i++) {
+		var range = ranges[i];
+
+		if(range.type !== "key-value") { continue; }
+
+		var key = rangeToBuffer(range.children[0], text).join("");
+		keyRange[key] = range;
+	}
+
+	this.get = function(key) { return obj[key]; }
+	this.put = function(key, val) {
+		obj[key] = val;
+
+		var range = keyRange[key];
+		if(range) {
+			range.children[2].type = "literal";
+			range.children[2].text = val;
+			range.children[2].parent = range;
+		} else {
+			ranges.push({ type: "literal", text: "\n" + key + "=" + val });
+		}
+	}
+	this.valueOf = this.toString = function() {
+		var buffer = [], stack = [].concat(ranges);
+
+		var node;
+		while((node = stack.shift()) != null) {
+			switch(node.type) {
+				case "literal":
+					buffer.push(node.text);
+					if(!node.parent) { buffer.push("\n"); }
+					else { buffer.push(text.substring(node.end, node.parent.end)); }
+					break;
+				case "key":
+				case "value":
+				case "comment":
+				case "whitespace":
+				case "key-value-separator":
+				case "escaped-value":
+				case "line-break":
+					buffer.push(text.substring(node.start, node.end));
+					break;
+				case "key-value":
+					Array.prototype.unshift.apply(stack, node.children);
+					break;
+			}
+		}
+
+		return buffer.join("");
+	},
+	this.save = function(callback) {
+		if(!path) { callback("Unknown path"); }
+
+		fs.writeFile(path, this.toString(), callback);
+	}
+}
+function createEditor(path, callback) {
+	fs.readFile(path, function(err, text) {
+		if(err) { return callback(err, null); }
+
+		text = text.toString();
+		return callback(null, new Editor(text, path));
+	});
+}
+
+function parse(text) {
+	text = text.toString();
+	var ranges = stringToRanges(text);
 	return rangesToObject(ranges, text);
 }
 
@@ -217,4 +293,4 @@ function readSync(path) {
 	return parse(fs.readFileSync(path));
 }
 
-module.exports = { parse: parse, read: read, readSync: readSync };
+module.exports = { parse: parse, read: read, readSync: readSync, createEditor: createEditor };
