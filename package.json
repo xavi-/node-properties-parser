@@ -1,5 +1,5 @@
 { "name": "node-properties-parser"
-, "version": "0.0.1"
+, "version": "0.0.2"
 , "description": "A parser for .properties files written in javascript"
 , "keywords": [ "parser", ".properties", "java", "file parser" ]
 , "maintainers":
