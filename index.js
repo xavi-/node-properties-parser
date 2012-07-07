@@ -9,10 +9,12 @@ function Iterator(text) {
 
 		return text.charAt(pos + num);
 	};
-	this.next = function() {
+	this.next = function(inc) {
+		inc = inc || 1;
+
 		if(pos >= length) { return null; }
 
-		return text.charAt(pos++);
+		return text.charAt((pos += inc) - inc);
 	};
 	this.pos = function() {
 		return pos;
@@ -60,7 +62,7 @@ function consumeEscapedVal(iter) {
 	iter.next(); // move past "\"
 	var curChar = iter.next();
 	if(curChar === "u") { // encoded unicode char
-		iter.next();iter.next();iter.next();iter.next(); // Read in the 4 hex values
+		iter.next(4); // Read in the 4 hex values
 	}
 
 	return { type: "escaped-value", start: start, end: iter.pos() };
