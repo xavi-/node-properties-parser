@@ -1,6 +1,6 @@
 # node-properties-parser
 
-A parser for [.properties](http://en.wikipedia.org/wiki/.properties) files written in javascript.  Properties files store key-value pairs.  They are typically used for configuration and internationalization in Java applications.  Here's an example of the format:
+A parser for [.properties](http://en.wikipedia.org/wiki/.properties) files written in javascript.  Properties files store key-value pairs.  They are typically used for configuration and internationalization in Java applications as well as in Actionscript projects.  Here's an example of the format:
 
 	# You are reading the ".properties" entry.
 	! The exclamation mark can also mark text as comments.
@@ -28,7 +28,7 @@ Currently works with any version of node.js.
 
 The easiest way to get node-properties-parser is with [npm](http://npmjs.org/):
 
-	npm install node-properties-parser
+	npm install properties-parser
 
 Alternatively you can clone this git repository:
 

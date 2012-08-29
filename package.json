@@ -1,7 +1,7 @@
-{ "name": "node-properties-parser"
-, "version": "0.0.2"
+{ "name": "properties-parser"
+, "version": "0.0.3"
 , "description": "A parser for .properties files written in javascript"
-, "keywords": [ "parser", ".properties", "java", "file parser" ]
+, "keywords": [ "parser", ".properties", "properties", "java", "file parser", "actionscript" ]
 , "maintainers":
   [ { "name": "Xavi"
     , "email": "xavi.rmz@gmail.com"
