@@ -11,7 +11,7 @@
 , "main": "./index.js"
 , "repository":
   { "type": "git"
-  , "url": "https://github.com/Xavi-/node-properties-parser"
+  , "url": "https://github.com/xavi-/node-properties-parser"
   }
 , "engines": { "node": ">= 0.3.1" }
 }
