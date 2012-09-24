@@ -208,6 +208,7 @@ function stringToRanges(text) {
 }
 
 function Editor(text, path) {
+	text = text || "";
 	var ranges = stringToRanges(text);
 	var obj = rangesToObject(ranges, text);
 	var keyRange = Object.create(null); // Creates to a true hash map
@@ -221,17 +222,36 @@ function Editor(text, path) {
 		keyRange[key] = range;
 	}
 
+	this.addHeadComment = function(comment) {
+		if(comment == null) { return; }
+
+		ranges.unshift({ type: "literal", text: "# " + comment.replace(/\n/g, "\n# ") });
+	};
+
 	this.get = function(key) { return obj[key]; }
-	this.put = function(key, val) {
+	this.set = function(key, val, comment) {
 		obj[key] = val;
 
 		var range = keyRange[key];
-		if(range) {
+		if(!range) {
+			keyRange[key] = range = { type: "literal", text: key + "=" + val };
+			ranges.push(range);
+		}
+
+		// comment === null deletes comment. if comment === undefined, it's left alone
+		if(comment !== undefined) {
+			range.comment = comment && "# " + comment.replace(/\n/g, "\n# ");
+		}
+
+		if(range.type == "literal") {
+			range.text = key + "=" + val;
+			if(range.comment != null) { range.text = range.comment + "\n" + range.text; }
+		} else if(range.type == "key-value") {
 			range.children[2].type = "literal";
 			range.children[2].text = val;
 			range.children[2].parent = range;
 		} else {
-			ranges.push({ type: "literal", text: "\n" + key + "=" + val });
+			throw "Unknown node type: " + range.type;
 		}
 	}
 	this.valueOf = this.toString = function() {
@@ -256,20 +276,27 @@ function Editor(text, path) {
 					break;
 				case "key-value":
 					Array.prototype.unshift.apply(stack, node.children);
+					if(node.comment) { stack.unshift({ type: "literal", text: node.comment }); }
 					break;
 			}
 		}
 
 		return buffer.join("");
 	},
-	this.save = function(callback) {
-		if(!path) { callback("Unknown path"); }
+	this.save = function(newPath, callback) {
+		newPath = newPath || path;
 
-		fs.writeFile(path, this.toString(), callback);
+		if(!newPath) { callback("Unknown path"); }
+
+		fs.writeFile(newPath, this.toString(), callback || function() {});
 	}
 }
 function createEditor(path, callback) {
-	fs.readFile(path, function(err, text) {
+	if(!path) { return new Editor(); }
+
+	if(!callback) { return new Editor(fs.readFileSync(path).toString(), path); }
+
+	return fs.readFile(path, function(err, text) {
 		if(err) { return callback(err, null); }
 
 		text = text.toString();
@@ -284,15 +311,13 @@ function parse(text) {
 }
 
 function read(path, callback) {
-	fs.readFile(path, function(err, data) {
+	if(!callback) { return parse(fs.readFileSync(path)); }
+
+	return fs.readFile(path, function(err, data) {
 		if(err) { return callback(err, null); }
 
 		return callback(null, parse(data));
 	});
 }
 
-function readSync(path) {
-	return parse(fs.readFileSync(path));
-}
-
-module.exports = { parse: parse, read: read, readSync: readSync, createEditor: createEditor };
+module.exports = { parse: parse, read: read, createEditor: createEditor };

@@ -21,8 +21,14 @@ Currently works with any version of node.js.
 ## The API
 
 - `parse(text)`: Parses `text` into key-value pairs.  Returns an object containing the key-value pairs.
-- `read(path, callback)`: Opens the file specified by `path` and calls `parse` on its content.  The result is then passed to `callback` as the second parameter.  If an error occurs, the error object is passed to `callback` as the first paramter.
-- `readSync(path)`: A synchronous version of `read`.  Opens the file specified by `path` synchronously and calls `parse` on its contents.
+- `read(path[, callback])`: Opens the file specified by `path` and calls `parse` on its content.  If the optional `callback` parameter is provided, the result is then passed to it as the second parameter.  If an error occurs, the error object is passed to `callback` as the first parameter. If `callback` is not provided, the file specified by `path` is synchronously read and calls `parse` on its contents.  The resulting object is immediately returned.
+- `createEditor([path[, callback]])`:  If neither `path` or `callback` are provided an empty editor object is returned synchronously.  If only `path` is provided, the file specified by `path` is synchronously read and parsed.  An editor object with the results in then immediately returned.  If both `path` and `callback` are provided, the file specified by `path` is read and parsed asynchronously.  An editor object with the results are then passed to `callback` as the second parameters.  If an error occurs, the error object is passed to `callback` as the first parameter.
+- `Editor`: The editor object is returned by `createEditor`.  Has the following API:
+	- `get(key)`: Returns the value currently associated with `key`.
+	- `set(key, value[, comment])`: Associates `key` with `value`.  An optional comment can be provided.
+	- `save([path[, callback]])`: Writes the current contents of this editor object to a file specified by `path`.  If `path` is not provided, then it'll be defaulted to the `path` value passed to `createEditor`.  The `callback` parameter is called when the file has been written to disk.
+	- `addHeadComment`: Added a comment to the head of the file.
+	- `toString`: Returns the string representation of this properties editor object.  This string will be written to a file if `save` is called.
 
 ## Getting node-properties-parser
 
