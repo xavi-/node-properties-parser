@@ -284,6 +284,10 @@ function Editor(text, path) {
 		return buffer.join("");
 	},
 	this.save = function(newPath, callback) {
+		if(typeof newPath === 'function') {
+			callback = newPath;
+			newPath = path;
+		}
 		newPath = newPath || path;
 
 		if(!newPath) { callback("Unknown path"); }
