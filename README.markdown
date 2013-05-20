@@ -26,7 +26,7 @@ Currently works with any version of node.js.
 - `Editor`: The editor object is returned by `createEditor`.  Has the following API:
 	- `get(key)`: Returns the value currently associated with `key`.
 	- `set(key, value[, comment])`: Associates `key` with `value`.  An optional comment can be provided.
-	- `save([path[, callback]])`: Writes the current contents of this editor object to a file specified by `path`.  If `path` is not provided, then it'll be defaulted to the `path` value passed to `createEditor`.  The `callback` parameter is called when the file has been written to disk.
+	- `save([path][, callback]])`: Writes the current contents of this editor object to a file specified by `path`.  If `path` is not provided, then it'll be defaulted to the `path` value passed to `createEditor`.  The `callback` parameter is called when the file has been written to disk.
 	- `addHeadComment`: Added a comment to the head of the file.
 	- `toString`: Returns the string representation of this properties editor object.  This string will be written to a file if `save` is called.
 
