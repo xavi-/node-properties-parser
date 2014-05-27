@@ -64,5 +64,26 @@ assert.equal(editor2.toString().indexOf("# Head Comment\n"), 0);
 assert.ok(editor2.get("valueOf") == null);
 assert.ok(editor2.get("toString") == null);
 
+var editor3 = prop.createEditor();
+editor3.set("stay", "ok");
+
+editor3.unset("key");
+editor3.unset("key", null);
+editor3.unset("key", undefined);
+assert.equal(editor3.toString().trim(), "stay=ok");
+
+editor3.set("key", "val");
+editor3.unset("key");
+assert.equal(editor3.toString().trim(), "stay=ok");
+
+editor3.set("key", "val");
+editor3.set("key", null);
+assert.equal(editor3.toString().trim(), "stay=ok");
+
+editor3.set("key", "val");
+editor3.set("key", undefined);
+assert.equal(editor3.toString().trim(), "stay=ok");
+
+
 // java ReadProperties test-cases.properties
 // javac ReadProperties.java
