@@ -3,6 +3,8 @@ import java.util.*;
 
 public class ReadProperties {
 	public static void main(String[] args) throws IOException {
+		if(args.length <= 0) { System.out.println("No file provided."); return; }
+
 		File f = new File(args[0]);
 
 		if(!f.exists()) { System.out.println("File not found: " + args[0]); return; }
