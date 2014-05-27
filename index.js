@@ -230,6 +230,11 @@ function Editor(text, path) {
 
 	this.get = function(key) { return obj[key]; }
 	this.set = function(key, val, comment) {
+		if (typeof val === 'undefined') {
+			this.unset(key);
+			return;
+		}
+
 		obj[key] = val;
 
 		var range = keyRange[key];
@@ -253,6 +258,16 @@ function Editor(text, path) {
 		} else {
 			throw "Unknown node type: " + range.type;
 		}
+	}
+	this.unset = function(key) {
+		var range = keyRange[key];
+		var index = ranges.indexOf(range);
+		if (index > -1) {
+			ranges.splice(index, 1);
+		}
+
+		delete keyRange[key];
+		delete obj[key];
 	}
 	this.valueOf = this.toString = function() {
 		var buffer = [], stack = [].concat(ranges);
