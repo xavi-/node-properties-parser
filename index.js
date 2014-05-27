@@ -228,7 +228,7 @@ function Editor(text, path) {
 		ranges.unshift({ type: "literal", text: "# " + comment.replace(/\n/g, "\n# ") });
 	};
 
-	this.get = function(key) { return obj[key]; }
+	this.get = function(key) { return obj[key]; };
 	this.set = function(key, val, comment) {
 		if(val == null) { this.unset(key); return; }
 
@@ -245,17 +245,17 @@ function Editor(text, path) {
 			range.comment = comment && "# " + comment.replace(/\n/g, "\n# ");
 		}
 
-		if(range.type == "literal") {
+		if(range.type === "literal") {
 			range.text = key + "=" + val;
 			if(range.comment != null) { range.text = range.comment + "\n" + range.text; }
-		} else if(range.type == "key-value") {
+		} else if(range.type === "key-value") {
 			range.children[2].type = "literal";
 			range.children[2].text = val;
 			range.children[2].parent = range;
 		} else {
 			throw "Unknown node type: " + range.type;
 		}
-	}
+	};
 	this.unset = function(key) {
 		var range = keyRange[key];
 		var index = ranges.indexOf(range);
@@ -265,7 +265,7 @@ function Editor(text, path) {
 
 		delete keyRange[key];
 		delete obj[key];
-	}
+	};
 	this.valueOf = this.toString = function() {
 		var buffer = [], stack = [].concat(ranges);
 
@@ -294,7 +294,7 @@ function Editor(text, path) {
 		}
 
 		return buffer.join("");
-	},
+	};
 	this.save = function(newPath, callback) {
 		if(typeof newPath === 'function') {
 			callback = newPath;
@@ -305,7 +305,7 @@ function Editor(text, path) {
 		if(!newPath) { callback("Unknown path"); }
 
 		fs.writeFile(newPath, this.toString(), callback || function() {});
-	}
+	};
 }
 function createEditor(path, callback) {
 	if(!path) { return new Editor(); }

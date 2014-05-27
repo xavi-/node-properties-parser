@@ -47,13 +47,13 @@ assert.ok(editor1.get("toString") == null);
 
 var editor2 = prop.createEditor("./test-cases.properties");
 assert.equal(fs.readFileSync("./test-cases.properties"), editor2.toString());
-editor2.set("lala", "prop1")
+editor2.set("lala", "prop1");
 assert.ok(editor2.toString().indexOf("lala=prop1") > -1);
-editor2.set("lala", "prop2", "A comment\nmulti-line1")
+editor2.set("lala", "prop2", "A comment\nmulti-line1");
 assert.ok(editor2.toString().indexOf("# A comment\n# multi-line1\nlala=prop2") > -1);
-editor2.set("lala", "prop3", "A comment\nmulti-line2")
+editor2.set("lala", "prop3", "A comment\nmulti-line2");
 assert.ok(editor2.toString().indexOf("# A comment\n# multi-line2\nlala=prop3") > -1);
-editor2.set("lala", "prop4")
+editor2.set("lala", "prop4");
 assert.ok(editor2.toString().indexOf("# A comment\n# multi-line2\nlala=prop4") > -1);
 editor2.set("lala", "prop5", null); // Delete's comment
 assert.ok(editor2.toString().indexOf("! The exclamation mark can also mark text as comments.\nlala=prop5") > -1);
