@@ -230,10 +230,7 @@ function Editor(text, path) {
 
 	this.get = function(key) { return obj[key]; }
 	this.set = function(key, val, comment) {
-		if (typeof val === 'undefined') {
-			this.unset(key);
-			return;
-		}
+		if(val == null) { this.unset(key); return; }
 
 		obj[key] = val;
 

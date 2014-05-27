@@ -25,7 +25,7 @@ Currently works with any version of node.js.
 - `createEditor([path[, callback]])`:  If neither `path` or `callback` are provided an empty editor object is returned synchronously.  If only `path` is provided, the file specified by `path` is synchronously read and parsed.  An editor object with the results in then immediately returned.  If both `path` and `callback` are provided, the file specified by `path` is read and parsed asynchronously.  An editor object with the results are then passed to `callback` as the second parameters.  If an error occurs, the error object is passed to `callback` as the first parameter.
 - `Editor`: The editor object is returned by `createEditor`.  Has the following API:
 	- `get(key)`: Returns the value currently associated with `key`.
-	- `set(key, [value[, comment]])`: Associates `key` with `value`. An optional comment can be provided. If `value` is not specified, unsets `key`.
+	- `set(key, [value[, comment]])`: Associates `key` with `value`. An optional comment can be provided. If `value` is not specified or is `null`, then `key` is unset.
 	- `unset(key)`: Unsets the specified `key`.
 	- `save([path][, callback]])`: Writes the current contents of this editor object to a file specified by `path`.  If `path` is not provided, then it'll be defaulted to the `path` value passed to `createEditor`.  The `callback` parameter is called when the file has been written to disk.
 	- `addHeadComment`: Added a comment to the head of the file.
