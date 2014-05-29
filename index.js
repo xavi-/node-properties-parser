@@ -209,6 +209,12 @@ function stringToRanges(text) {
 
 function Editor(text, path) {
 	text = text || "";
+	// Make sure there's an empty line at the end
+	// otherwise the first new property will be placed at the end of the last line from the original text
+	if (text.length > 0 && text[text.length-1] != '\n'){
+		text += "\n";
+	}
+
 	var ranges = stringToRanges(text);
 	var obj = rangesToObject(ranges, text);
 	var keyRange = Object.create(null); // Creates to a true hash map
@@ -260,7 +266,12 @@ function Editor(text, path) {
 		var range = keyRange[key];
 		var index = ranges.indexOf(range);
 		if (index > -1) {
-			ranges.splice(index, 1);
+			// remove any trailing whitespace
+			var numToRemove = 1;
+			while (index + numToRemove < ranges.length && ranges[index + numToRemove].type === "whitespace" )
+				numToRemove ++;
+
+			ranges.splice(index, numToRemove);
 		}
 
 		delete keyRange[key];
