@@ -263,6 +263,8 @@ function Editor(text, path) {
 		}
 	};
 	this.unset = function(key) {
+		if(!(key in obj)) { return; }
+
 		var range = keyRange[key];
 		var index = ranges.indexOf(range);
 		if (index > -1) {
