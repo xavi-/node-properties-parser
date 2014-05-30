@@ -57,8 +57,8 @@ editor2.set("lala", "prop4");
 assert.ok(editor2.toString().indexOf("# A comment\n# multi-line2\nlala=prop4") > -1);
 editor2.set("lala", "prop5", null); // Delete's comment
 assert.ok(editor2.toString().indexOf("! The exclamation mark can also mark text as comments.\nlala=prop5") > -1);
-editor2.set("basic", "prop6");
-assert.ok(editor2.toString().indexOf("basic=prop6") > -1);
+editor2.set("basic-non-existing", "prop6");
+assert.ok(editor2.toString().indexOf("\nbasic-non-existing=prop6") > -1);
 editor2.addHeadComment("Head Comment");
 assert.equal(editor2.toString().indexOf("# Head Comment\n"), 0);
 assert.ok(editor2.get("valueOf") == null);
