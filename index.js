@@ -207,13 +207,20 @@ function stringToRanges(text) {
 	return ranges;
 }
 
+function isNewLineRange(range) {
+	if(!range) { return false; }
+
+	if(range.type === "whitespace") { return true; }
+
+	if(range.type === "literal") {
+		return isWhitespace(range.text) && range.text.indexOf("\n") > -1;
+	}
+
+	return false;
+}
+
 function Editor(text, path) {
 	text = text || "";
-	// Make sure there's an empty line at the end
-	// otherwise the first new property will be placed at the end of the last line from the original text
-	if (text.length > 0 && text[text.length-1] != '\n'){
-		text += "\n";
-	}
 
 	var ranges = stringToRanges(text);
 	var obj = rangesToObject(ranges, text);
@@ -231,7 +238,7 @@ function Editor(text, path) {
 	this.addHeadComment = function(comment) {
 		if(comment == null) { return; }
 
-		ranges.unshift({ type: "literal", text: "# " + comment.replace(/\n/g, "\n# ") });
+		ranges.unshift({ type: "literal", text: "# " + comment.replace(/\n/g, "\n# ") + "\n" });
 	};
 
 	this.get = function(key) { return obj[key]; };
@@ -243,17 +250,22 @@ function Editor(text, path) {
 		var range = keyRange[key];
 		if(!range) {
 			keyRange[key] = range = { type: "literal", text: key + "=" + val };
+
+			var prevRange = ranges[ranges.length - 1];
+			if(prevRange != null && !isNewLineRange(prevRange)) {
+				ranges.push({ type: "literal", text: "\n" });
+			}
 			ranges.push(range);
 		}
 
 		// comment === null deletes comment. if comment === undefined, it's left alone
 		if(comment !== undefined) {
-			range.comment = comment && "# " + comment.replace(/\n/g, "\n# ");
+			range.comment = comment && "# " + comment.replace(/\n/g, "\n# ") + "\n";
 		}
 
 		if(range.type === "literal") {
 			range.text = key + "=" + val;
-			if(range.comment != null) { range.text = range.comment + "\n" + range.text; }
+			if(range.comment != null) { range.text = range.comment + range.text; }
 		} else if(range.type === "key-value") {
 			range.children[2] = { type: "literal", text: val, parent: range };
 		} else {
@@ -264,15 +276,9 @@ function Editor(text, path) {
 		if(!(key in obj)) { return; }
 
 		var range = keyRange[key];
-		var index = ranges.indexOf(range);
-		if (index > -1) {
-			// remove any trailing whitespace
-			var numToRemove = 1;
-			while (index + numToRemove < ranges.length && ranges[index + numToRemove].type === "whitespace" )
-				numToRemove ++;
+		var idx = ranges.indexOf(range);
 
-			ranges.splice(index, numToRemove);
-		}
+		ranges.splice(idx, (isNewLineRange(ranges[idx + 1]) ? 2 : 1));
 
 		delete keyRange[key];
 		delete obj[key];
@@ -285,8 +291,7 @@ function Editor(text, path) {
 			switch(node.type) {
 				case "literal":
 					buffer.push(node.text);
-					if(!node.parent) { buffer.push("\n"); }
-					else { buffer.push(text.substring(node.end, node.parent.end)); }
+					if(node.parent) { buffer.push(text.substring(node.end, node.parent.end)); }
 					break;
 				case "key":
 				case "value":
