@@ -29,24 +29,24 @@ prop.read("./test-cases.properties", function(err, data) {
 
 var editor1 = prop.createEditor();
 editor1.set("basic", "prop1");
-assert.equal(editor1.toString().trim(), "basic=prop1");
+assert.equal(editor1.toString(), "basic=prop1");
 editor1.set("basic", "prop2", "A comment\nmulti-line1");
-assert.equal(editor1.toString().trim(), "# A comment\n# multi-line1\nbasic=prop2");
+assert.equal(editor1.toString(), "# A comment\n# multi-line1\nbasic=prop2");
 editor1.set("basic", "prop3", "A comment\nmulti-line2");
-assert.equal(editor1.toString().trim(), "# A comment\n# multi-line2\nbasic=prop3");
+assert.equal(editor1.toString(), "# A comment\n# multi-line2\nbasic=prop3");
 editor1.set("basic", "prop4");
-assert.equal(editor1.toString().trim(), "# A comment\n# multi-line2\nbasic=prop4");
+assert.equal(editor1.toString(), "# A comment\n# multi-line2\nbasic=prop4");
 editor1.set("basic", "prop5", null); // Delete's comment
-assert.equal(editor1.toString().trim(), "basic=prop5");
+assert.equal(editor1.toString(), "basic=prop5");
 editor1.set("basic1", "prop6");
-assert.equal(editor1.toString().trim(), "basic=prop5\nbasic1=prop6");
+assert.equal(editor1.toString(), "basic=prop5\nbasic1=prop6");
 editor1.addHeadComment("Head Comment");
-assert.equal(editor1.toString().trim(), "# Head Comment\nbasic=prop5\nbasic1=prop6");
+assert.equal(editor1.toString(), "# Head Comment\nbasic=prop5\nbasic1=prop6");
 assert.ok(editor1.get("valueOf") == null);
 assert.ok(editor1.get("toString") == null);
 
 var editor2 = prop.createEditor("./test-cases.properties");
-assert.equal(fs.readFileSync("./test-cases.properties"), editor2.toString());
+assert.equal(fs.readFileSync("./test-cases.properties").toString(), editor2.toString());
 editor2.set("lala", "prop1");
 assert.ok(editor2.toString().indexOf("lala=prop1") > -1);
 editor2.set("lala", "prop2", "A comment\nmulti-line1");
