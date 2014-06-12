@@ -291,7 +291,6 @@ function Editor(text, path) {
 			switch(node.type) {
 				case "literal":
 					buffer.push(node.text);
-					if(node.parent) { buffer.push(text.substring(node.end, node.parent.end)); }
 					break;
 				case "key":
 				case "value":
