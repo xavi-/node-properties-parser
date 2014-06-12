@@ -84,6 +84,21 @@ editor3.set("key", "val");
 editor3.set("key", undefined);
 assert.equal(editor3.toString().trim(), "stay=ok");
 
+prop.createEditor("./test-cases.properties", function(err, editor) {
+	var properties = {};
+	properties.lala = 'whatever';
+	properties.website = 'whatever';
+	properties.language = 'whatever';
+	properties.message = 'whatever';
+	properties['key\ with\ spaces'] = 'whatever';
+	properties.tab = 'whatever';
+	properties['long-unicode'] = 'whatever';
+	properties['another-test'] = 'whatever';
+	for (var item in properties) {
+		editor.set(item, properties[item]);
+	}
+	editor.save('./test-cases-copy.properties');
+});
 
 // java ReadProperties test-cases.properties
 // javac ReadProperties.java
