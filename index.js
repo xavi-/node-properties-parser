@@ -267,7 +267,7 @@ function Editor(text, path) {
 			range.text = key + "=" + val;
 			if(range.comment != null) { range.text = range.comment + range.text; }
 		} else if(range.type === "key-value") {
-			range.children[2] = { type: "literal", text: val, parent: range };
+			range.children[2] = { type: "literal", text: val };
 		} else {
 			throw "Unknown node type: " + range.type;
 		}
