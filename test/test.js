@@ -97,7 +97,26 @@ prop.createEditor("./test-cases.properties", function(err, editor) {
 	for (var item in properties) {
 		editor.set(item, properties[item]);
 	}
-	editor.save('./test-cases-copy.properties');
+
+	assert.equal(
+		editor.toString(),
+		'# You are reading the ".properties" entry.\n' +
+		'! The exclamation mark can also mark text as comments.\n' +
+		'lala=whatever\n' +
+		'website = whatever\n' +
+		'language = whatever\n' +
+		'# The backslash below tells the application to continue reading\n' +
+		'# the value onto the next line.\n' +
+		'message = whatever\n' +
+		'# Add spaces to the key\n' +
+		'key\\ with\\ spaces = whatever\n' +
+		'# Unicode\n' +
+		'tab : whatever\n' +
+		'long-unicode : whatever\n' +
+		'space\\ separator     key val \\n three\n' +
+		'another-test :whatever\n' +
+		'   null-prop'
+	);
 });
 
 // java ReadProperties test-cases.properties
