@@ -90,7 +90,7 @@ prop.createEditor("./test-cases.properties", function(err, editor) {
 	properties.website = 'whatever';
 	properties.language = 'whatever';
 	properties.message = 'whatever';
-	properties['key\ with\ spaces'] = 'whatever';
+	properties['key with spaces'] = 'whatever';
 	properties.tab = 'whatever';
 	properties['long-unicode'] = 'whatever';
 	properties['another-test'] = 'whatever';
