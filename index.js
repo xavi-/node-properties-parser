@@ -323,9 +323,19 @@ function Editor(text, options) {
 		}
 		newPath = newPath || path;
 
-		if(!newPath) { callback("Unknown path"); }
+		if(!newPath) {
+            if (callback) {
+                return callback("Unknown path");
+            }
+            throw new Error("Unknown path");
+        }
 
-		fs.writeFile(newPath, this.toString(), callback || function() {});
+        if (callback) {
+            fs.writeFile(newPath, this.toString(), callback);
+        } else {
+            fs.writeFileSync(newPath, this.toString());
+        }
+
 	};
 }
 function createEditor(/*path, options, callback*/) {
