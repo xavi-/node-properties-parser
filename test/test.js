@@ -84,6 +84,10 @@ editor3.set("key", "val");
 editor3.set("key", undefined);
 assert.equal(editor3.toString().trim(), "stay=ok");
 
+var editor4 = prop.createEditor({ separator: ' ' });
+editor4.set("stay", "ok");
+assert.equal(editor4.toString().trim(), "stay ok");
+
 prop.createEditor("./test-cases.properties", function(err, editor) {
 	var properties = {};
 	properties.lala = 'whatever';
