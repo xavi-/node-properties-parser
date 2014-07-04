@@ -219,8 +219,14 @@ function isNewLineRange(range) {
 	return false;
 }
 
-function Editor(text, path) {
+function Editor(text, options) {
+    if (typeof text === 'object') {
+        options = text;
+        text = null;
+    }
 	text = text || "";
+    var path = options.path;
+    var separator = options.separator || '=';
 
 	var ranges = stringToRanges(text);
 	var obj = rangesToObject(ranges, text);
@@ -249,7 +255,7 @@ function Editor(text, path) {
 
 		var range = keyRange[key];
 		if(!range) {
-			keyRange[key] = range = { type: "literal", text: key + "=" + val };
+			keyRange[key] = range = { type: "literal", text: key + separator + val };
 
 			var prevRange = ranges[ranges.length - 1];
 			if(prevRange != null && !isNewLineRange(prevRange)) {
@@ -264,7 +270,7 @@ function Editor(text, path) {
 		}
 
 		if(range.type === "literal") {
-			range.text = key + "=" + val;
+			range.text = key + separator + val;
 			if(range.comment != null) { range.text = range.comment + range.text; }
 		} else if(range.type === "key-value") {
 			range.children[2] = { type: "literal", text: val };
@@ -317,21 +323,47 @@ function Editor(text, path) {
 		}
 		newPath = newPath || path;
 
-		if(!newPath) { callback("Unknown path"); }
+		if(!newPath) {
+            if (callback) {
+                return callback("Unknown path");
+            }
+            throw new Error("Unknown path");
+        }
 
-		fs.writeFile(newPath, this.toString(), callback || function() {});
+        if (callback) {
+            fs.writeFile(newPath, this.toString(), callback);
+        } else {
+            fs.writeFileSync(newPath, this.toString());
+        }
+
 	};
 }
-function createEditor(path, callback) {
-	if(!path) { return new Editor(); }
+function createEditor(/*path, options, callback*/) {
+    var path, options, callback;
+    var args = Array.prototype.slice.call(arguments);
+    for (var i = 0; i < args.length; i ++) {
+        var arg = args[i];
+        if (!path && typeof arg === 'string') {
+            path = arg;
+        } else if (!options && typeof arg === 'object') {
+            options = arg;
+        } else if (!callback && typeof arg === 'function') {
+            callback = arg;
+        }
+    }
+    options = options || {};
+    path = path || options.path;
+    options.path = path;
 
-	if(!callback) { return new Editor(fs.readFileSync(path).toString(), path); }
+	if(!path) { return new Editor(options); }
+
+	if(!callback) { return new Editor(fs.readFileSync(path).toString(), options); }
 
 	return fs.readFile(path, function(err, text) {
 		if(err) { return callback(err, null); }
 
 		text = text.toString();
-		return callback(null, new Editor(text, path));
+		return callback(null, new Editor(text, options));
 	});
 }
 
