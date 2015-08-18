@@ -386,6 +386,7 @@ function createEditor(/*path, options, callback*/) {
     }
     options = options || {};
     path = path || options.path;
+    callback = callback || options.callback;
     options.path = path;
 
 	if(!path) { return new Editor(options); }
