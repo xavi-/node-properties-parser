@@ -123,5 +123,22 @@ prop.createEditor("./test-cases.properties", function(err, editor) {
 	);
 });
 
+// Escaping keys
+var editor4 = prop.createEditor();
+editor4.set("space test", "value");
+editor4.set("equals=key", "value");
+editor4.set("colon:key", "value");
+editor4.set("new\nline", "value");
+editor4.set("üñîçø∂é", "value");
+
+assert.equal(
+	editor4.toString(),
+	"space\\ test=value\n" +
+	"equals\\=key=value\n" +
+	"colon\\:key=value\n" +
+	"new\\nline=value\n" +
+	"\\u00fc\\u00f1\\u00ee\\u00e7\\u00f8\\u2202\\u00e9=value"
+);
+
 // java ReadProperties test-cases.properties
 // javac ReadProperties.java

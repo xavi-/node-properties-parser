@@ -219,6 +219,34 @@ function isNewLineRange(range) {
 	return false;
 }
 
+function escapeMaker(escapes) {
+	return function escapeKey(key) {
+		var zeros = [ "", "0", "00", "000" ];
+		var buf = [];
+
+		for(var i = 0; i < key.length; i++) {
+			var chr = key.charAt(i);
+
+			if(escapes[chr]) { buf.push(escapes[chr]); continue; }
+
+			var code = chr.codePointAt(0);
+
+			if(code <= 0x7F) { buf.push(chr); continue; }
+
+			var hex = code.toString(16);
+
+			buf.push("\\u");
+			buf.push(zeros[4 - hex.length]);
+			buf.push(hex);
+		}
+
+		return buf.join("");
+	};
+}
+
+var escapeKey = escapeMaker({ " ": "\\ ", "\n": "\\n", ":": "\\:", "=": "\\=" });
+var escapeVal = escapeMaker({ "\n": "\\n" });
+
 function Editor(text, options) {
     if (typeof text === 'object') {
         options = text;
@@ -252,10 +280,15 @@ function Editor(text, options) {
 		if(val == null) { this.unset(key); return; }
 
 		obj[key] = val;
+		var escapedKey = escapeKey(key);
+		var escapedVal = escapeVal(val);
 
 		var range = keyRange[key];
 		if(!range) {
-			keyRange[key] = range = { type: "literal", text: key + separator + val };
+			keyRange[key] = range = {
+				type: "literal",
+				text: escapedKey + separator + escapedVal
+			};
 
 			var prevRange = ranges[ranges.length - 1];
 			if(prevRange != null && !isNewLineRange(prevRange)) {
@@ -270,10 +303,10 @@ function Editor(text, options) {
 		}
 
 		if(range.type === "literal") {
-			range.text = key + separator + val;
+			range.text = escapedKey + separator + escapedVal;
 			if(range.comment != null) { range.text = range.comment + range.text; }
 		} else if(range.type === "key-value") {
-			range.children[2] = { type: "literal", text: val };
+			range.children[2] = { type: "literal", text: escapedVal };
 		} else {
 			throw "Unknown node type: " + range.type;
 		}
