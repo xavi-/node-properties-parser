@@ -1,3 +1,4 @@
+require("string.prototype.codepointat");
 var fs = require("fs");
 
 function Iterator(text) {
@@ -58,7 +59,7 @@ function startsEscapedVal(chr) {
 }
 function consumeEscapedVal(iter) {
 	var start = iter.pos();
-	
+
 	iter.next(); // move past "\"
 	var curChar = iter.next();
 	if(curChar === "u") { // encoded unicode char
