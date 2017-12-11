@@ -364,10 +364,10 @@ function Editor(text, options) {
             throw new Error("Unknown path");
         }
 
-        if (callback) {
-            fs.writeFile(newPath, this.toString(), callback);
+        if (callback) {        	
+            fs.writeFile(newPath, this.toString(), 'utf8', callback);
         } else {
-            fs.writeFileSync(newPath, this.toString());
+            fs.writeFileSync(newPath, this.toString(), {'encoding':'utf8'});
         }
 
 	};
