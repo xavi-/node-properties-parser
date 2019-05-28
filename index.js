@@ -177,8 +177,33 @@ function rangeToBuffer(range, text) {
 
 	return buffer;
 }
-function rangesToObject(ranges, text) {
+function rangesToObject(ranges, text, findDuplicates, excludeDuplicateKeyPrefixs) {
 	var obj = Object.create(null); // Creates to a true hash map
+
+	if (findDuplicates) {
+		var repeatedKeys = [], repeatedValues = [];
+		var obj1 = Object.create(null);
+		var canCheckKeysPresent = true;
+		for(var i = 0; i < ranges.length; i++) {
+			var range = ranges[i];
+	
+			if(range.type !== "key-value") { continue; }
+	
+			var key = rangeToBuffer(range.children[0], text).join("");
+			var val = rangeToBuffer(range.children[2], text).join("");
+
+			Object.keys(obj).includes(key) && repeatedKeys.push(key);
+			obj[key] = val;
+
+			canCheckKeysPresent = !excludeDuplicateKeyPrefixs.find(function(prefixKey) { return key.startsWith(prefixKey) });
+			if (canCheckKeysPresent) {
+				Object.values(obj1).includes(val) && repeatedValues.push(val);
+				obj1[key] = val;
+			}
+		}
+
+		return { obj, repeatedKeys, repeatedValues };
+	}
 
 	for(var i = 0; i < ranges.length; i++) {
 		var range = ranges[i];
@@ -190,7 +215,7 @@ function rangesToObject(ranges, text) {
 		obj[key] = val;
 	}
 
-	return obj;
+	return { obj };
 }
 
 function stringToRanges(text) {
@@ -258,7 +283,7 @@ function Editor(text, options) {
     var separator = options.separator || '=';
 
 	var ranges = stringToRanges(text);
-	var obj = rangesToObject(ranges, text);
+	var { obj } = rangesToObject(ranges, text);
 	var keyRange = Object.create(null); // Creates to a true hash map
 
 	for(var i = 0; i < ranges.length; i++) {
@@ -402,10 +427,10 @@ function createEditor(/*path, options, callback*/) {
 	});
 }
 
-function parse(text) {
+function parse(text, findDuplicates =false, excludeDuplicateKeyPrefixs = []) {
 	text = text.toString();
 	var ranges = stringToRanges(text);
-	return rangesToObject(ranges, text);
+	return rangesToObject(ranges, text, findDuplicates, excludeDuplicateKeyPrefixs);
 }
 
 function read(path, callback) {
