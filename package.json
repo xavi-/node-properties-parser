@@ -29,7 +29,5 @@
   "scripts": {
     "test": "node test/test.js"
   },
-  "dependencies": {
-    "string.prototype.codepointat": "^0.2.0"
-  }
+  "dependencies": {}
 }

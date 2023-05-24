@@ -1,4 +1,3 @@
-require("string.prototype.codepointat");
 var fs = require("fs");
 
 function Iterator(text) {
