@@ -72,6 +72,7 @@ function consumeKey(iter) {
 
 	var curChar;
 	while((curChar = iter.peek()) !== null) {
+		if(startsLineBreak(iter)) { children.push(consumeLineBreak(iter)); continue; }
 		if(startsSeparator(curChar)) { break; }
 		if(startsEscapedVal(curChar)) { children.push(consumeEscapedVal(iter)); continue; }
 

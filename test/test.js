@@ -15,6 +15,7 @@ prop.read(__dirname + "/test-cases.properties", function(err, data) {
 	assert.equal(data["space separator"], 'key val \n three');
 	assert.equal(data["another-test"], ':: hihi');
 	assert.equal(data["null-prop"], '');
+	assert.equal(data["foofoo"], 'barbar');
 	assert.ok(data["valueOf"] == null, "Properties are set that shouldn't be (valueOf)");
 	assert.ok(data["toString"] == null, "Properties are set that shouldn't be (toString)");
 
@@ -121,7 +122,10 @@ prop.createEditor(__dirname + "/test-cases.properties", function(err, editor) {
 		'long-unicode : whatever\n' +
 		'space\\ separator     key val \\n three\n' +
 		'another-test :whatever\n' +
-		'   null-prop'
+		'   null-prop\n' +
+		'foo\\\n' +
+		'    foo=bar\\\n' +
+		'        bar\n'
 	);
 
 	const now = Date.now();
