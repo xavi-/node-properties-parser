@@ -2,8 +2,8 @@ var fs = require("fs");
 var assert = require("assert");
 var prop = require("../index.js");
 
-var syncData = prop.read("./test-cases.properties");
-prop.read("./test-cases.properties", function(err, data) {
+var syncData = prop.read(__dirname + "/test-cases.properties");
+prop.read(__dirname + "/test-cases.properties", function(err, data) {
 	assert.deepEqual(data, syncData);
 	assert.equal(data["lala"], 'ℊ the foo foo lalala;');
 	assert.equal(data["website"], 'http://en.wikipedia.org/');
@@ -45,8 +45,8 @@ assert.equal(editor1.toString(), "# Head Comment\nbasic=prop5\nbasic1=prop6");
 assert.ok(editor1.get("valueOf") == null);
 assert.ok(editor1.get("toString") == null);
 
-var editor2 = prop.createEditor("./test-cases.properties");
-assert.equal(fs.readFileSync("./test-cases.properties").toString(), editor2.toString());
+var editor2 = prop.createEditor(__dirname + "/test-cases.properties");
+assert.equal(fs.readFileSync(__dirname + "/test-cases.properties").toString(), editor2.toString());
 editor2.set("lala", "prop1");
 assert.ok(editor2.toString().indexOf("lala=prop1") > -1);
 editor2.set("lala", "prop2", "A comment\nmulti-line1");
@@ -88,7 +88,7 @@ var editor4 = prop.createEditor({ separator: ' ' });
 editor4.set("stay", "ok");
 assert.equal(editor4.toString().trim(), "stay ok");
 
-prop.createEditor("./test-cases.properties", function(err, editor) {
+prop.createEditor(__dirname + "/test-cases.properties", function(err, editor) {
 	var properties = {};
 	properties.lala = 'whatever';
 	properties.website = 'whatever';
