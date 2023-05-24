@@ -89,6 +89,8 @@ editor4.set("stay", "ok");
 assert.equal(editor4.toString().trim(), "stay ok");
 
 prop.createEditor(__dirname + "/test-cases.properties", function(err, editor) {
+	assert.ifError(err);
+
 	var properties = {};
 	properties.lala = 'whatever';
 	properties.website = 'whatever';
