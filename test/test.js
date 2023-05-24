@@ -150,5 +150,5 @@ assert.equal(
 	"\\u00fc\\u00f1\\u00ee\\u00e7\\u00f8\\u2202\\u00e9=value"
 );
 
-// java ReadProperties test-cases.properties
 // javac ReadProperties.java
+// java ReadProperties test-cases.properties
