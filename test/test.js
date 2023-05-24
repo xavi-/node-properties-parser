@@ -121,6 +121,14 @@ prop.createEditor(__dirname + "/test-cases.properties", function(err, editor) {
 		'another-test :whatever\n' +
 		'   null-prop'
 	);
+
+	const now = Date.now();
+	editor.save(__dirname + `/test-save-${now}.properties`, function(err) {
+		assert.ifError(err);
+		fs.rmSync(__dirname + `/test-save-${now}.properties`);
+	});
+	editor.save(__dirname + `/test-save-sync-${now}.properties`);
+	fs.rmSync(__dirname + `/test-save-sync-${now}.properties`);
 });
 
 // Escaping keys
