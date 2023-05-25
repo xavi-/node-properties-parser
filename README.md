@@ -2,21 +2,21 @@
 
 A parser for [.properties](http://en.wikipedia.org/wiki/.properties) files written in javascript.  Properties files store key-value pairs.  They are typically used for configuration and internationalization in Java applications as well as in Actionscript projects.  Here's an example of the format:
 
-	# You are reading the ".properties" entry.
-	! The exclamation mark can also mark text as comments.
-	website = http://en.wikipedia.org/
-	language = English
-	# The backslash below tells the application to continue reading
-	# the value onto the next line.
-	message = Welcome to \
-	          Wikipedia!
-	# Add spaces to the key
-	key\ with\ spaces = This is the value that could be looked up with the key "key with spaces".
-	# Unicode
-	tab : \u0009
+```properties
+# You are reading the ".properties" entry.
+! The exclamation mark can also mark text as comments.
+website = http://en.wikipedia.org/
+language = English
+# The backslash below tells the application to continue reading
+# the value onto the next line.
+message = Welcome to \
+			Wikipedia!
+# Add spaces to the key
+key\ with\ spaces = This is the value that could be looked up with the key "key with spaces".
+# Unicode
+tab : \u0009
+```
 *(taken from [Wikipedia](http://en.wikipedia.org/wiki/.properties#Format))*
-
-Currently works with any version of node.js.
 
 ## The API
 
@@ -34,9 +34,9 @@ Currently works with any version of node.js.
 	- `addHeadComment`: Added a comment to the head of the file.
 	- `toString`: Returns the string representation of this properties editor object.  This string will be written to a file if `save` is called.
 
-## Getting node-properties-parser
+## Getting properties-parser
 
-The easiest way to get node-properties-parser is with [npm](http://npmjs.org/):
+The easiest way to get node-properties-parser is with [npm](https://www.npmjs.com/package/properties-parser):
 
 	npm install properties-parser
 
@@ -44,8 +44,14 @@ Alternatively you can clone this git repository:
 
 	git://github.com/xavi-/node-properties-parser.git
 
+For type definitions use [npm](https://www.npmjs.com/package/@types/properties-parser):
+
+	npm install --save @types/properties-parser
+
 ## Developed by
+
 * Xavi Ramirez
 
 ## License
+
 This project is released under [The MIT License](http://www.opensource.org/licenses/mit-license.php).
