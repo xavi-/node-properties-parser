@@ -95,7 +95,7 @@ function consumeKeyValSeparator(iter) {
 		seenHardSep = (curChar === ":" || curChar === "=");
 		if(seenHardSep) { iter.next(); continue; }
 
-		break; // curChar is a non-separtor char
+		break; // curChar is a non-separator char
 	}
 
 	return { type: "key-value-separator", start: start, end: iter.pos() };
