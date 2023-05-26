@@ -391,9 +391,9 @@ function createEditor(/*path, options, callback*/) {
 
 	if(!path) { return new Editor(options); }
 
-	if(!callback) { return new Editor(fs.readFileSync(path).toString(), options); }
+	if(!callback) { return new Editor(fs.readFileSync(path, "utf8").toString(), options); }
 
-	return fs.readFile(path, function(err, text) {
+	return fs.readFile(path, "utf8", function(err, text) {
 		if(err) { return callback(err, null); }
 
 		text = text.toString();
@@ -408,9 +408,9 @@ function parse(text) {
 }
 
 function read(path, callback) {
-	if(!callback) { return parse(fs.readFileSync(path)); }
+	if(!callback) { return parse(fs.readFileSync(path, "utf8")); }
 
-	return fs.readFile(path, function(err, data) {
+	return fs.readFile(path, "utf8", function(err, data) {
 		if(err) { return callback(err, null); }
 
 		return callback(null, parse(data));
