@@ -1,6 +1,6 @@
 {
   "name": "properties-parser",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "A parser for .properties files written in javascript",
   "keywords": [
     "parser",
