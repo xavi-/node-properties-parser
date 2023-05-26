@@ -111,6 +111,7 @@ prop.createEditor(__dirname + "/test-cases.properties", function(err, editor) {
 		'! The exclamation mark can also mark text as comments.\n' +
 		'lala=whatever\n' +
 		'website = whatever\n' +
+		'language = Dutch\n' +
 		'language = whatever\n' +
 		'# The backslash below tells the application to continue reading\n' +
 		'# the value onto the next line.\n' +
