@@ -26,6 +26,7 @@ tab : \u0009
 	- `options.separator`: The character used to separate key/values.  Defaults to "=".
 	- `options.path`: Treated the same way as the optional `path` argument.  If both are provided the argument wins.
 	- `options.callback`: Treated the same way as the optional `callback` parameter.  If both are provided the argument wins.
+- `editorFromString(text[, options])`: creates an `Editor` object from the text string passed in
 - `Editor`: The editor object is returned by `createEditor`.  Has the following API:
 	- `get(key)`: Returns the value currently associated with `key`.
 	- `set(key, [value[, comment]])`: Associates `key` with `value`. An optional comment can be provided. If `value` is not specified or is `null`, then `key` is unset.

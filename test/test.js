@@ -155,5 +155,12 @@ assert.equal(
 	"\\u00fc\\u00f1\\u00ee\\u00e7\\u00f8\\u2202\\u00e9=value"
 );
 
+const editor5 = prop.editorFromString("");
+assert.equal(editor5.toString(), "");
+
+const editor6 = prop.editorFromString("one=1\ntwo=2");
+assert.equal(editor6.get("one"), "1");
+assert.equal(editor6.get("two"), "2");
+
 // javac ReadProperties.java
 // java ReadProperties test-cases.properties

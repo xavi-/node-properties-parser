@@ -401,6 +401,10 @@ function createEditor(/*path, options, callback*/) {
 	});
 }
 
+function editorFromString(text, options) {
+	return new Editor(text, options ?? {});
+}
+
 function parse(text) {
 	text = text.toString();
 	var ranges = stringToRanges(text);
@@ -417,4 +421,4 @@ function read(path, callback) {
 	});
 }
 
-module.exports = { parse: parse, read: read, createEditor: createEditor };
+module.exports = { parse, read, createEditor, editorFromString };
